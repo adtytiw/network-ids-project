@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+*.py[oc]
+uv.lock
+
+# Data
+data/raw/
+data/processed/
+
+.DS_Store
