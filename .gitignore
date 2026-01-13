@@ -1,10 +1,27 @@
+# Python / Environment
 .venv/
 __pycache__/
-*.py[oc]
-uv.lock
+*.py[ocd]
+*$py.class
+*.so
 
-# Data
+# Data and Models (Keep the repo light)
 data/raw/
 data/processed/
+models/*.joblib
+models/*.pth
+models/*.onnx
 
+# Windows-Specific Junk
+Thumbs.db
+desktop.ini
+$RECYCLE.BIN/
+
+# macOS-Specific Junk
 .DS_Store
+.AppleDouble
+.LSOverride
+
+# IDEs
+.vscode/
+.idea/
