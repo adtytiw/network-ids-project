@@ -14,15 +14,18 @@ if [ ! -d "$VENV_DIR" ]; then
     exit 1
 fi
 
+# Check if KNN model exists, train if not
+if [ ! -f "models/knn_model.joblib" ]; then
+    echo "⚠️ KNN model not found. Training..."
+    "$PYTHON" src/ml/train_knn.py
+fi
+
 # Kill previous instances
-# Note: pkill filtering might need adjustment if multiple instances exist, 
-# but this is usually sufficient for a personal project.
 pkill -f "uvicorn main:app"
 pkill -f "streamlit run"
-# We match the specific python path if possible, or just the script name
 sudo pkill -f "src/web/live_sniffer.py"
 
-echo "Starting Guardian AI..."
+echo "Starting Guardian AI (KNN Edition)..."
 
 # API server
 echo "[1/3] Starting inference API..."
