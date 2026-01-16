@@ -6,8 +6,8 @@ import joblib
 from sklearn.preprocessing import StandardScaler
 from torch.utils.data import DataLoader, TensorDataset
 
-# 1. Define the LSTM Model
 class TrafficLSTM(nn.Module):
+    """2-layer LSTM for binary traffic classification."""
     def __init__(self, input_size, hidden_size=64, num_layers=2):
         super(TrafficLSTM, self).__init__()
         self.lstm = nn.LSTM(input_size, hidden_size, num_layers, batch_first=True)
@@ -19,22 +19,22 @@ class TrafficLSTM(nn.Module):
         out = self.fc(out[:, -1, :]) # Take only the last time step
         return self.sigmoid(out)
 
-# 2. Training Function
 def train_model():
+    """Main training loop. Outputs model to models/lstm_model.pth"""
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    print(f" usando (Using) device: {device}")
+    print(f"Using device: {device}")
 
     # Load data
     df = pd.read_csv("data/processed/cleaned_traffic.csv")
     X_raw = df.drop('Label', axis=1).values
     y_raw = df['Label'].values
 
-    # Scale data (Mandatory for LSTMs)
+    # normalize features
     scaler = StandardScaler()
     X_scaled = scaler.fit_transform(X_raw)
     joblib.dump(scaler, "models/scaler.joblib")
 
-    # Create sequences (e.g., look at last 5 rows to predict the 6th)
+    # sliding window for sequence input
     window = 5
     X_seq, y_seq = [], []
     for i in range(len(X_scaled) - window):
@@ -52,9 +52,9 @@ def train_model():
     optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
     criterion = nn.BCELoss()
 
-    print("🚀 Training starting on RTX 3050...")
+    print("Starting training...")
     model.train()
-    for epoch in range(10): # 10 epochs for a solid test
+    for epoch in range(10):
         total_loss = 0
         for batch_X, batch_y in loader:
             batch_X, batch_y = batch_X.to(device), batch_y.to(device)

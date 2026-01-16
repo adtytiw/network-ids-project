@@ -4,20 +4,28 @@ __pycache__/
 *.py[ocd]
 *$py.class
 *.so
+*.egg-info/
 
-# Data and Models (Keep the repo light)
+# Data (large CSVs - keep repo light)
 data/raw/
 data/processed/
-models/*.joblib
-models/*.pth
-models/*.onnx
 
-# Windows-Specific Junk
+# Trained models (include if needed for deployment)
+# models/*.joblib
+# models/*.pth
+# models/*.onnx
+
+# Runtime state files
+live_alerts.json
+stats.json
+lockdown_status.json
+
+# Windows
 Thumbs.db
 desktop.ini
 $RECYCLE.BIN/
 
-# macOS-Specific Junk
+# macOS
 .DS_Store
 .AppleDouble
 .LSOverride
